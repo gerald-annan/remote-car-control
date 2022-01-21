@@ -9,6 +9,7 @@ defmodule RemoteControlCar do
     %{new() | nickname: nickname}
   end
 
+  @spec display_distance(map :: %RemoteControlCar{}) :: <<_::56, _::_*8>>
   def display_distance(remote_car) do
     "#{Map.fetch!(remote_car, :distance_driven_in_meters)} meters"
   end
