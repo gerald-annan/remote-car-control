@@ -22,7 +22,9 @@ defmodule RemoteControlCar do
     end
   end
 
+  @spec drive(map :: %RemoteControlCar{}) :: map :: %RemoteControlCar{}
   def drive(remote_car) do
-    # Please implement the drive/1 function
+    Map.update!(remote_car, :distance_driven_in_meters, &(&1 + 20))
+    |> Map.update!(:battery_percentage, &(&1 - 1))
   end
 end
