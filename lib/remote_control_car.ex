@@ -14,8 +14,12 @@ defmodule RemoteControlCar do
     "#{Map.fetch!(remote_car, :distance_driven_in_meters)} meters"
   end
 
+  @spec display_battery(map :: %RemoteControlCar{}) :: <<_::64, _::_*8>>
   def display_battery(remote_car) do
-    # Please implement the display_battery/1 function
+    case Map.fetch!(remote_car, :battery_percentage) > 0 do
+      true -> "Battery at #{Map.fetch!(remote_car, :battery_percentage)}%"
+      false -> "Battery empty"
+    end
   end
 
   def drive(remote_car) do
