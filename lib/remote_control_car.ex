@@ -6,7 +6,7 @@ defmodule RemoteControlCar do
   end
 
   def new(nickname) do
-    # Please implement the new/1 function
+    %{new() | nickname: nickname}
   end
 
   def display_distance(remote_car) do
