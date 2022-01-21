@@ -2,7 +2,7 @@ defmodule RemoteControlCar do
   defstruct battery_percentage: 100, distance_driven_in_meters: 0, nickname: "none"
 
   def new() do
-    # Please implement the new/0 function
+    %RemoteControlCar{}
   end
 
   def new(nickname) do
