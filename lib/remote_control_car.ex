@@ -24,7 +24,13 @@ defmodule RemoteControlCar do
 
   @spec drive(map :: %RemoteControlCar{}) :: map :: %RemoteControlCar{}
   def drive(remote_car) do
-    Map.update!(remote_car, :distance_driven_in_meters, &(&1 + 20))
-    |> Map.update!(:battery_percentage, &(&1 - 1))
+    case Map.fetch!(remote_car, :battery_percentage) > 0 do
+      true ->
+        Map.update!(remote_car, :distance_driven_in_meters, &(&1 + 20))
+        |> Map.update!(:battery_percentage, &(&1 - 1))
+
+      false ->
+        remote_car
+    end
   end
 end
