@@ -166,4 +166,5 @@ Update the `RemoteControlCar.drive/1` function to not increase the distance driv
 
 ### Contributed to by
 
+- @gerald-annan
 - @angelikatyborska
