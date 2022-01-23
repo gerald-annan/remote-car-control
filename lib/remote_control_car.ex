@@ -1,36 +1,45 @@
 defmodule RemoteControlCar do
-  defstruct battery_percentage: 100, distance_driven_in_meters: 0, nickname: nil
-  @type remote_control_car :: %RemoteControlCar{}
-  def new() do
-    Map.update!(%RemoteControlCar{}, :nickname, fn _ -> "none" end)
-  end
-
-  def new(nickname) do
-    %{new() | nickname: nickname}
+  @enforce_keys :nickname
+  defstruct [:battery_percentage, :distance_driven_in_meters, :nickname]
+  @type remote_control_car :: %__MODULE__{}
+  def new(nickname \\ "none") do
+    %__MODULE__{distance_driven_in_meters: 0, battery_percentage: 100, nickname: nickname}
   end
 
   @spec display_distance(remote_control_car()) :: <<_::56, _::_*8>>
-  def display_distance(remote_car) do
-    "#{Map.fetch!(remote_car, :distance_driven_in_meters)} meters"
+  def display_distance(%__MODULE__{
+        distance_driven_in_meters: distance,
+        battery_percentage: _,
+        nickname: _
+      }) do
+    "#{distance} meters"
   end
 
   @spec display_battery(map :: remote_control_car()) :: <<_::64, _::_*8>>
-  def display_battery(remote_car) do
-    case Map.fetch!(remote_car, :battery_percentage) > 0 do
-      true -> "Battery at #{Map.fetch!(remote_car, :battery_percentage)}%"
-      false -> "Battery empty"
+  def display_battery(%__MODULE__{
+        distance_driven_in_meters: _,
+        battery_percentage: battery,
+        nickname: _
+      }) do
+    case battery do
+      battery when battery > 0 -> "Battery at #{battery}%"
+      _ -> "Battery empty"
     end
   end
 
   @spec drive(map :: remote_control_car()) :: map :: %RemoteControlCar{}
-  def drive(remote_car) do
-    case Map.fetch!(remote_car, :battery_percentage) > 0 do
-      true ->
-        Map.update!(remote_car, :distance_driven_in_meters, &(&1 + 20))
-        |> Map.update!(:battery_percentage, &(&1 - 1))
+  def drive(%__MODULE__{distance_driven_in_meters: _, battery_percentage: 0, nickname: _} = car),
+    do: car
 
-      false ->
-        remote_car
-    end
+  def drive(%__MODULE__{
+        distance_driven_in_meters: distance,
+        battery_percentage: battery,
+        nickname: nickname
+      }) do
+    %__MODULE__{
+      distance_driven_in_meters: distance + 20,
+      battery_percentage: battery - 1,
+      nickname: nickname
+    }
   end
 end
